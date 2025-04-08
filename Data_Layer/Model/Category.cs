@@ -1,6 +1,8 @@
-﻿using Web_Api_Core_.Model.Joins_Tables;
+﻿
 
-namespace Web_Api_Core_.Model
+using Web_Api_Core_.Model.Joins_Tables;
+
+namespace Data_Layer.Model
 {
     public class Category
     {

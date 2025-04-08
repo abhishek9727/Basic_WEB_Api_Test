@@ -1,4 +1,6 @@
-﻿namespace Web_Api_Core_.Model.Joins_Tables
+﻿using Data_Layer.Model;
+
+namespace Web_Api_Core_.Model.Joins_Tables
 {
     public class PokemonCategory
     {
