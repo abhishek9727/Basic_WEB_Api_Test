@@ -22,7 +22,7 @@ namespace Web_Api_Core_.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]
-        public IActionResult GetPokemons()
+        public ActionResult GetPokemons()
         {
             var pokemons = _mapper.Map<List<PokemonVM>>(_pokemonRepo.GetPokemons());
 
@@ -36,7 +36,7 @@ namespace Web_Api_Core_.Controllers
         [HttpGet("{pokeId}")]
         [ProducesResponseType(200, Type = typeof(Pokemon))]
         [ProducesResponseType(400)]
-        public IActionResult GetPokemon(int pokeId)
+        public ActionResult GetPokemon(int pokeId)
         {
             if(!_pokemonRepo.PokemonExists(pokeId))
                 return NotFound();
@@ -53,7 +53,7 @@ namespace Web_Api_Core_.Controllers
         [HttpGet("{pokeId}/rating")]
         [ProducesResponseType(200, Type = typeof(decimal))]
         [ProducesResponseType(400)]
-        public IActionResult GetPokemonRating(int pokeId)
+        public ActionResult GetPokemonRating(int pokeId)
         {
             if(!_pokemonRepo.PokemonExists(pokeId))
                 return NotFound();
