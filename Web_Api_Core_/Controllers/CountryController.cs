@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Businnes_Layer.Repositories.Implimentation;
 using Businnes_Layer.Repositories.Interfaces;
+using Data_Layer.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web_Api_Core_.DTO;
@@ -61,6 +63,42 @@ namespace Web_Api_Core_.Controllers
                 return BadRequest(ModelState);
 
             return Ok(country);
+
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public ActionResult CreateCountry([FromBody] CountryVM countryCreate)
+        {
+            if (countryCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+            var country = _countryRepository.GetAllCountries()
+                .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+            if (country != null)
+            {
+                ModelState.AddModelError("", " Country Already Exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var countrymap = _mapper.Map<Country>(countryCreate);
+
+            if (!_countryRepository.CreateCountry(countrymap))
+            {
+                ModelState.AddModelError("", "Something Went Wrong While Saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("SucessFully Created");
+
 
         }
     }

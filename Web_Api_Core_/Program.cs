@@ -5,6 +5,7 @@ using Businnes_Layer.Repositories.Interfaces;
 using Data_Layer;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddControllers().AddJsonOptions(x =>
+x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

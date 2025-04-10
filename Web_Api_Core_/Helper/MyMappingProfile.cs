@@ -10,10 +10,20 @@ namespace Web_Api_Core_.Helper
         public MyMappingProfile()
         {
             CreateMap<Pokemon, PokemonVM>();
+            CreateMap<PokemonVM, Pokemon>();
+
             CreateMap<Category, CategoryVM>();
+            CreateMap<CategoryVM, Category>();
+
             CreateMap<Country, CountryVM>();
+            CreateMap<CountryVM, Country>();
+
             CreateMap<Owner, OwnrVM>();
+            CreateMap<OwnrVM, Owner>();
+
             CreateMap<Review, ReviewVM>();
+            CreateMap<ReviewVM, Review>();
+
             CreateMap<Reviewer, ReviewerVM>();
         }
     }

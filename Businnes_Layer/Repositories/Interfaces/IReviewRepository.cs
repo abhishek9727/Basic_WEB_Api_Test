@@ -17,6 +17,10 @@ namespace Businnes_Layer.Repositories.Interfaces
 
         bool ReviewExists (int reviewid);
 
+        bool CreateReview (Review review);
+
+        bool Save();
+
 
     }
 }
