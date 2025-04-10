@@ -18,6 +18,12 @@ namespace Businnes_Layer.Repositories.Implimentation
             _context = context;
         }
 
+        public bool CreateReview(Review review)
+        {
+            _context.Add(review);
+            return Save();
+        }
+
         public Review GetReview(int reviewid)
         {
             return _context.Reviews.Where(c => c.id == reviewid).FirstOrDefault();
@@ -36,6 +42,12 @@ namespace Businnes_Layer.Repositories.Implimentation
         public bool ReviewExists(int reviewid)
         {
             return _context.Reviews.Any(r => r.id == reviewid);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

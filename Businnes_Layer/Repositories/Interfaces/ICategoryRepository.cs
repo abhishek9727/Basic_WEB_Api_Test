@@ -17,5 +17,9 @@ namespace Businnes_Layer.Repositories.Interfaces
         ICollection<Pokemon> GetPokemonByCategory(int categoryId);
 
         bool CategoryExists(int id);
+
+        bool CreateCategory (Category category);
+
+        bool Save();
     }
 }

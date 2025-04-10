@@ -67,6 +67,41 @@ namespace Web_Api_Core_.Controllers
             return Ok(pokemons);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public ActionResult CreateCategory([FromBody] CategoryVM categoryCreate)
+        {
+            if (categoryCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+            var getCategory = _categoryRepository.GetCategories()
+                .Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+            if (getCategory != null)
+            {
+                ModelState.AddModelError("", " Cetegory Already Exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var categoryMap = _mapper.Map<Category>(categoryCreate);
+            if (!_categoryRepository.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something Went Wrong While Saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("SucessFully Created");
+
+
+        }
+
 
     }
 }
