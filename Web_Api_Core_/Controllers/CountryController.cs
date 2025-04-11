@@ -101,5 +101,59 @@ namespace Web_Api_Core_.Controllers
 
 
         }
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult UpdateCountry(int countryId, [FromBody] CountryVM updateCountry)
+        {
+            if (updateCountry == null)
+                return BadRequest(ModelState);
+
+            if (countryId != updateCountry.Id)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.countryExists(countryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var countryMap = _mapper.Map<Country>(updateCountry);
+
+            if (!_countryRepository.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Somithing Went wrong while updating Country");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult DeleteCategory(int countryId)
+        {
+
+
+            if (!_countryRepository.countryExists(countryId))
+                return NotFound();
+
+            var countrytoDelete = _countryRepository.GetCountryById(countryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.DeleteCountry(countrytoDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while trying to delete this country");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

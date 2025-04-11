@@ -59,7 +59,7 @@ namespace Web_Api_Core_.Controllers
             var pokemons = _mapper.Map<List<PokemonVM>>(
                 _categoryRepository.GetPokemonByCategory(CategId));
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -102,6 +102,62 @@ namespace Web_Api_Core_.Controllers
 
         }
 
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult UpdateCategory(int categoryId, [FromBody] CategoryVM updatedcategory)
+        {
+            if (updatedcategory == null)
+                return BadRequest(ModelState);
 
-    }
+            if (categoryId != updatedcategory.Id)
+                return BadRequest(ModelState);
+
+            if (!_categoryRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryMap = _mapper.Map<Category>(updatedcategory);
+
+            if (!_categoryRepository.UpdateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Somithing Went wrong while updating category");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult DeleteCategory(int categoryId)
+        {
+   
+
+            if (!_categoryRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            var categoryToDelete = _categoryRepository.GetCategory(categoryId);
+
+           if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+           if(!_categoryRepository.DeleteCategory(categoryToDelete))
+            {
+                ModelState.AddModelError("","Something went wrong while trying to delete this category");
+                return StatusCode(500, ModelState);
+            }
+
+           return NoContent();
+        }
+    
+
+
+   }
 }

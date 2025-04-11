@@ -43,6 +43,12 @@ namespace Businnes_Layer.Repositories.Implimentation
             return Save();
         }
 
+        public bool DeletePokemon(Pokemon pokemonid)
+        {
+            _context.Remove(pokemonid);
+            return Save();
+        }
+
         public Pokemon GetPokemon(int id)
         {
             return _context.Pokemons.Where(c => c.Id == id).FirstOrDefault();
@@ -79,6 +85,12 @@ namespace Businnes_Layer.Repositories.Implimentation
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon)
+        {
+            _context.Update(pokemon);  
+            return Save();
         }
     }
 }

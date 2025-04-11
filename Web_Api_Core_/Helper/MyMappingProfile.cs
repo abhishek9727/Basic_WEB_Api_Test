@@ -25,6 +25,7 @@ namespace Web_Api_Core_.Helper
             CreateMap<ReviewVM, Review>();
 
             CreateMap<Reviewer, ReviewerVM>();
+            CreateMap<ReviewerVM, Reviewer>();
         }
     }
 }

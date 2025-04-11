@@ -17,6 +17,14 @@ namespace Businnes_Layer.Repositories.Interfaces
 
         bool ReveiewerExists(int reviewerId);
 
+        bool CreateReviewer (Reviewer reviewer);
+
+        bool UpdateReviewer (Reviewer reviewer);
+
+        bool DeleteReviewer (Reviewer reviewer);
+
+        bool Save();
+
 
     }
 }
