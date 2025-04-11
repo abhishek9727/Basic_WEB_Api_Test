@@ -108,6 +108,60 @@ namespace Web_Api_Core_.Controllers
 
         }
 
+        [HttpPut("{ownerId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult UpdateOwner(int ownerId, [FromBody] OwnrVM updateOwner)
+        {
+            if (updateOwner == null)
+                return BadRequest(ModelState);
+
+            if (ownerId != updateOwner.Id)
+                return BadRequest(ModelState);
+
+            if (!_owner.OwnerExists(ownerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var ownerMap = _mapper.Map<Owner>(updateOwner);
+
+            if (!_owner.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Somithing Went wrong while updating Owner");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{ownerId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult DeleteCategory(int ownerId)
+        {
+
+
+            if (!_owner.OwnerExists(ownerId))
+                return NotFound();
+
+            var ownerToDelete = _owner.GetOwner(ownerId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_owner.DeleteOwner(ownerToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while trying to delete this owner");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
 
     }
 }

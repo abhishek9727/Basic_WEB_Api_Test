@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Businnes_Layer.Repositories.Implimentation;
 using Businnes_Layer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -107,6 +108,60 @@ namespace Web_Api_Core_.Controllers
             return Ok("SucessFully Created");
 
 
+        }
+
+        [HttpPut("{reviewId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult UpdateReviewer(int reviewId, [FromBody] ReviewVM updatereview)
+        {
+            if (updatereview == null)
+                return BadRequest(ModelState);
+
+            if (reviewId != updatereview.id)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewMap = _mapper.Map<Review>(updatereview);
+
+            if (!_reviewRepository.UpdateReview(reviewMap))
+            {
+                ModelState.AddModelError("", "Somithing Went wrong while updating review");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{reviewId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult DeleteReview(int reviewId)
+        {
+
+
+            if (!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            var reviewToDelete = _reviewRepository.GetReview(reviewId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.DeleteReview(reviewToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while trying to delete this review");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
 
     }

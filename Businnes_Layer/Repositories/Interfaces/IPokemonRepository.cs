@@ -20,6 +20,11 @@ namespace Businnes_Layer.Repositories.Interfaces
 
         bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon);
 
+        bool UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon);
+
+        bool DeletePokemon(Pokemon pokemonid);
+
+
         bool Save();
 
     }
